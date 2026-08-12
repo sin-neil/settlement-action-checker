@@ -220,7 +220,7 @@
         'API Processing':     { actions: {}, note: 'Awaiting gateway response. No actions available until the gateway completes processing.', waiting: true },
         'API Failed':         { actions: { cancel: true, submitApi: true, markSuccess: true }, note: '' },
         'Name Mismatch':      { actions: { cancel: true, submitApi: true, markSuccess: true }, note: '' },
-        'Non Definitive':     { actions: {}, note: 'Gateway response was inconclusive. No actions available until the gateway provides a definitive result.', waiting: true },
+        'Non Definitive':     { actions: {}, note: 'Gateway response was inconclusive. No further actions available.' },
       },
       'Success': {
         'No API Status':      { actions: { uploadProof: true }, note: '' },
