@@ -25,22 +25,18 @@
       background: var(--bg);
       color: var(--text-primary);
       margin: 0;
-      padding: 40px 20px;
+      padding: 24px 20px;
       min-height: 100vh;
     }
     .container {
       max-width: 560px;
       margin: 0 auto;
     }
-    .title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
     .subtitle {
       font-size: 14px;
       color: var(--text-tertiary);
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+      line-height: 1.5;
     }
     .field-row {
       display: flex;
@@ -159,19 +155,12 @@
       color: var(--text-secondary);
       line-height: 1.5;
     }
-    .footer {
-      margin-top: 32px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-tertiary);
-    }
   </style>
 <base target="_blank">
 </head>
 <body>
   <div class="container">
-    <div class="title">Settlement Action Checker</div>
-    <div class="subtitle">Select the settlement's current state to see what you can do.</div>
+    <div class="subtitle">Select a settlement's current state to see which actions are available.</div>
 
     <div class="field-row">
       <div class="field">
@@ -200,20 +189,29 @@
     </div>
 
     <div id="results" class="results"></div>
-
-    <div class="footer">Settlement Action Checker — Xenith Docs</div>
   </div>
 
   <script>
     function getValidApiStatuses(tx, type) {
       if (tx === 'Pending') return ['No API Status'];
-      if (tx === 'Processing') return ['No API Status', 'API Processing', 'API Failed', 'Name Mismatch', 'Non Definitive'];
+      if (tx === 'Processing') {
+        if (type === 'International') return ['No API Status'];
+        return ['No API Status', 'API Processing', 'API Failed', 'Name Mismatch', 'Non Definitive'];
+      }
       if (tx === 'Success') {
         if (type === 'International') return ['No API Status'];
         return ['No API Status', 'API Failed', 'Name Mismatch'];
       }
       if (tx === 'Cancelled') return ['No API Status', 'API Failed', 'Name Mismatch'];
       return [];
+    }
+
+    function getValidSettlementTypes(tx, api) {
+      if (tx === 'Processing' && api === 'API Processing') return ['Same Currency'];
+      if (tx === 'Processing' && api === 'API Failed') return ['Same Currency'];
+      if (tx === 'Processing' && api === 'Name Mismatch') return ['Same Currency'];
+      if (tx === 'Processing' && api === 'Non Definitive') return ['Same Currency'];
+      return ['Same Currency', 'International'];
     }
 
     const rules = {
@@ -280,6 +278,27 @@
       }
     }
 
+    function updateTypeOptions() {
+      const tx = txSelect.value;
+      const api = apiSelect.value;
+      const currentType = typeSelect.value;
+
+      if (!tx || !api) return;
+
+      const options = getValidSettlementTypes(tx, api);
+      let html = '';
+      for (const opt of options) {
+        html += `<option value="${opt}">${opt}</option>`;
+      }
+      typeSelect.innerHTML = html;
+
+      if (options.includes(currentType)) {
+        typeSelect.value = currentType;
+      } else {
+        typeSelect.value = options[0];
+      }
+    }
+
     function render() {
       const tx = txSelect.value;
       const api = apiSelect.value;
@@ -335,8 +354,8 @@
       results.innerHTML = html;
     }
 
-    txSelect.addEventListener('change', () => { updateApiOptions(); render(); });
-    apiSelect.addEventListener('change', render);
+    txSelect.addEventListener('change', () => { updateApiOptions(); updateTypeOptions(); render(); });
+    apiSelect.addEventListener('change', () => { updateTypeOptions(); render(); });
     typeSelect.addEventListener('change', () => { updateApiOptions(); render(); });
 
     updateApiOptions();
