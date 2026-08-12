@@ -2,6 +2,10 @@
 
 An interactive reference tool for Xenith operators to quickly determine which actions are available for a settlement based on its current Transaction Status, API Status, and Settlement Type.
 
+## Live Demo
+
+[Open the checker →](https://sin-neil.github.io/settlement-action-checker/)
+
 ## What it does
 
 The checker filters the live UI-valid state combinations and surfaces only the actions an operator can actually take — eliminating guesswork from the settlement workflow.
