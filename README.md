@@ -1,7 +1,3 @@
-# Settlement Action Checker
-
-An interactive reference tool for Xenith operators to quickly determine which actions are available for a settlement based on its current Transaction Status, API Status, and Settlement Type.
-
 ## Live Demo
 
 [Open the checker →](https://sin-neil.github.io/settlement-action-checker/)
@@ -31,13 +27,6 @@ The checker filters the live UI-valid state combinations and surfaces only the a
 | Success | No API Status | International | Upload Payment Proof |
 | Success | Any | Same Currency | None |
 | Cancelled | Any | Both | None |
-
-## Cost behavior reference
-
-| Mechanism | Fee Configuration Used |
-|:---|:---|
-| Submit API | Payout & API Settlement |
-| Mark as Success | Manual Same Currency Settlement |
 
 ## Deployment
 
